@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
 from flask_wtf import FlaskForm
@@ -7,6 +8,7 @@ from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 moment = Moment(app)
+bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = 'string used as a secret key'
 
 
