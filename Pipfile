@@ -9,6 +9,7 @@ flask-moment = "*"
 flask-wtf = "*"
 flask-bootstrap = "*"
 flask-sqlalchemy = "*"
+flask-migrate = "*"
 
 [dev-packages]
 autopep8 = "*"
