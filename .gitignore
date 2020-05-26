@@ -1,0 +1,10 @@
+# Packages
+__pycache__
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# SQLite databases
+*.sqlite
