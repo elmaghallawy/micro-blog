@@ -11,6 +11,7 @@ flask-bootstrap = "*"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
 flask-mail = "*"
+flask-login = "*"
 
 [dev-packages]
 autopep8 = "*"
