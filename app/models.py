@@ -1,12 +1,13 @@
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 from . import login_manager
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 
 
 class Permission:
+    """class of permissions names and values"""
     FOLLOW = 1
     COMMENT = 2
     WRITE = 4
@@ -30,28 +31,35 @@ class Role(db.Model):
 
     def __init__(self, **kwargs):
         super(Role, self).__init__(**kwargs)
+        # initialize the permission with 0 if None
         if self.permissions is None:
             self.permissions = 0
 
     def add_permission(self, perm):
+        """add a permission to a role"""
         if not self.has_permission(perm):
             self.permissions += perm
 
     def remove_permission(self, perm):
+        """remove a permission from a role"""
         if self.has_permission(perm):
             self.permissions -= perm
 
     def reset_permissions(self):
+        """reset permissions for a role"""
         self.permissions = 0
 
     def has_permission(self, perm):
+        """check if a role has a certain permission"""
         return self.permissions & perm == perm
 
     def __repr__(self):
+        """role string represntation with its name"""
         return '<Role %r>' % self.name
 
     @staticmethod
     def insert_roles():
+        """insert roles into the database"""
         roles = {
             'User': [Permission.FOLLOW, Permission.COMMENT, Permission.WRITE],
             'Moderator': [Permission.FOLLOW, Permission.COMMENT, Permission.WRITE,
@@ -83,6 +91,16 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
 
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        # check if the user has a role if not then check if s/he is admin
+        # if not then assign the default role to the uers
+        if self.role is None:
+            if self.email == current_app.config['FLASKY_ADMIN']:
+                self.role = Role.query.filter_by(name='Admin').first()
+            if self.role is None:
+                self.role = Role.query.filter_by(default=True).first()
+
     @property
     def password(self):
         """raise an error when trying to get the password"""
@@ -106,6 +124,7 @@ class User(db.Model, UserMixin):
         return s.dumps({'confirm': self.id}).decode('utf-8')
 
     def confirm(self, token):
+        """confirm the token recieved"""
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token.encode('utf-8'))
@@ -116,3 +135,24 @@ class User(db.Model, UserMixin):
         self.confirmed = True
         db.session.add(self)
         return True
+
+    def can(self, perm):
+        """check of the user has a certain permission"""
+        return self.role is not None and self.role.has_permission(perm)
+
+    def is_admin(self):
+        """check if the user is admin """
+        return self.can(Permission.ADMIN)
+
+
+class AnonymousUser(AnonymousUserMixin):
+    """class of anonymous user"""
+
+    def can(self, permissions):
+        return False
+
+    def is_admin(self):
+        return False
+
+
+login_manager.anonymous_user = AnonymousUser
