@@ -64,8 +64,8 @@ class Role(db.Model):
             'User': [Permission.FOLLOW, Permission.COMMENT, Permission.WRITE],
             'Moderator': [Permission.FOLLOW, Permission.COMMENT, Permission.WRITE,
                           Permission.MODERATE],
-            'Admin': [Permission.FOLLOW, Permission.COMMENT, Permission.WRITE,
-                      Permission.MODERATE, Permission.ADMIN],
+            'Administrator': [Permission.FOLLOW, Permission.COMMENT, Permission.WRITE,
+                              Permission.MODERATE, Permission.ADMIN],
         }
         default_role = 'User'
 
@@ -93,11 +93,11 @@ class User(db.Model, UserMixin):
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
-        # check if the user has a role if not then check if s/he is admin
+        # check if the user has a role if not then check if s/he is administrator
         # if not then assign the default role to the uers
         if self.role is None:
             if self.email == current_app.config['FLASKY_ADMIN']:
-                self.role = Role.query.filter_by(name='Admin').first()
+                self.role = Role.query.filter_by(name='Administrator').first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
 
@@ -140,8 +140,8 @@ class User(db.Model, UserMixin):
         """check of the user has a certain permission"""
         return self.role is not None and self.role.has_permission(perm)
 
-    def is_admin(self):
-        """check if the user is admin """
+    def is_administrator(self):
+        """check if the user is administrator """
         return self.can(Permission.ADMIN)
 
 
@@ -151,7 +151,7 @@ class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
         return False
 
-    def is_admin(self):
+    def is_administrator(self):
         return False
 
 
