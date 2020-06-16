@@ -2,7 +2,9 @@ from flask import render_template
 from . import main
 
 
-# we use app_errorhandler for the bluprint
+@main.app_errorhandler(403)
+def forbidden(e):
+    return render_template('403.html'), 403
 
 
 @main.app_errorhandler(404)
