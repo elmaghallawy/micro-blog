@@ -1,10 +1,11 @@
 from datetime import datetime
+import hashlib
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from . import login_manager
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
+from flask import current_app, request
 
 
 class Permission:
@@ -96,6 +97,7 @@ class User(db.Model, UserMixin):
     about_me = db.Column(db.Text())
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    # avatar_hash = db.Column(db.String(32))
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -155,6 +157,12 @@ class User(db.Model, UserMixin):
     def is_administrator(self):
         """check if the user is administrator """
         return self.can(Permission.ADMIN)
+
+    def gravatar(self, size=100, default='identicon', rating='g'):
+        """generate avatar for each user"""
+        url = 'https://secure.gravatar.com/avatar'
+        hash = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'{url}/{hash}?s={size}&d={default}&r={rating}'
 
 
 class AnonymousUser(AnonymousUserMixin):
