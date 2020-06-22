@@ -105,7 +105,7 @@ class User(db.Model, UserMixin):
         # check if the user has a role if not then check if s/he is administrator
         # if not then assign the default role to the uers
         if self.role is None:
-            if self.email == current_app.config['FLASKY_ADMIN']:
+            if self.email == current_app.config['MICRO_ADMIN']:
                 self.role = Role.query.filter_by(name='Administrator').first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()

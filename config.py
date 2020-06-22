@@ -13,6 +13,7 @@ class Config:
     MICRO_MAIL_SUBJECT_PREFIX = '[MICRO]'
     MICRO_MAIL_SENDER = 'MICRO Admin <MICRO@example.com>'
     MICRO_ADMIN = os.environ.get('MICRO_ADMIN')
+    MICRO_POSTS_PER_PAGE = os.environ.get('MICRO_POSTS_PER_PAGE')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @staticmethod
