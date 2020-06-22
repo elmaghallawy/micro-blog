@@ -17,6 +17,7 @@ email-validator = "*"
 [dev-packages]
 autopep8 = "*"
 pylint = "*"
+faker = "*"
 
 [requires]
 python_version = "3.8"
