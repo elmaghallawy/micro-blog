@@ -13,6 +13,10 @@ flask-migrate = "*"
 flask-mail = "*"
 flask-login = "*"
 email-validator = "*"
+flask-markdown = "*"
+markdown = "*"
+bleach = "*"
+flask-pagedown = "*"
 
 [dev-packages]
 autopep8 = "*"

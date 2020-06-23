@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, BooleanField, SelectField, ValidationError
-from wtforms.validators import DataRequired, Length, Email, Regexp
+from wtforms.validators import DataRequired, Length, Email, Regexp, Required
 from ..models import Role, User
+from flask_pagedown.fields import PageDownField
 
 
 class EditProfileForm(FlaskForm):
@@ -45,5 +46,5 @@ class EditProfileAdminForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    body = TextAreaField('What\'s on your mind?')
+    body = PageDownField('What\'s on your mind?', validators=[Required()])
     submit = SubmitField('Submit')
