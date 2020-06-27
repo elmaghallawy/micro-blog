@@ -1,3 +1,7 @@
 {
-    "python.pythonPath": "/home/ahmed/.local/share/virtualenvs/micro-blog-u30nKpHb/bin/python"
+    "python.pythonPath": "/home/ahmed/.local/share/virtualenvs/micro-blog-u30nKpHb/bin/python",
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint-flask"
+    ]
 }
