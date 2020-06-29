@@ -147,6 +147,12 @@ class User(db.Model, UserMixin):
         """generate hash value for a given password"""
         self.password_hash = generate_password_hash(password)
 
+    @property
+    def followed_posts(self):
+        """return the posts of the followed users"""
+        return Post.query.join(Follow, followed_id == Post.author_id)\
+            .filter(Follow.follower_id == self.id)
+
     def verify_password(self, password):
         """verify a given password"""
         return check_password_hash(self.password_hash, password)
