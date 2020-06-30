@@ -17,6 +17,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MICRO_POSTS_PER_PAGE = 20
     MICRO_FOLLOWERS_PER_PAGE = 50
+    MICRO_COMMENTS_PER_PAGE = 20
 
     @staticmethod
     def init_app(app):
