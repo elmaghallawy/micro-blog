@@ -150,7 +150,7 @@ class User(db.Model, UserMixin):
     @property
     def followed_posts(self):
         """return the posts of the followed users"""
-        return Post.query.join(Follow, followed_id == Post.author_id)\
+        return Post.query.join(Follow, Follow.followed_id == Post.author_id)\
             .filter(Follow.follower_id == self.id)
 
     def verify_password(self, password):
