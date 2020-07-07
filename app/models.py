@@ -224,6 +224,19 @@ class User(db.Model, UserMixin):
         return self.followers.filter_by(
             follower_id=user.id).first() is not None
 
+    def generate_auth_token(self, expiration):
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return None
+        return User.query.get(data['id'])
+
 
 class AnonymousUser(AnonymousUserMixin):
     """class of anonymous user"""
@@ -256,6 +269,8 @@ class Post(db.Model):
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True
         ))
+
+
 db.event.listen(Post.body, 'set', Post.on_changed_body)
 
 
@@ -277,4 +292,6 @@ class Comment(db.Model):
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True
         ))
+
+
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
