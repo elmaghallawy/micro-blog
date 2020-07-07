@@ -17,6 +17,7 @@ flask-markdown = "*"
 markdown = "*"
 bleach = "*"
 flask-pagedown = "*"
+flask-httpauth = "*"
 
 [dev-packages]
 autopep8 = "*"
