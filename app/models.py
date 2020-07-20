@@ -324,5 +324,25 @@ class Comment(db.Model):
             tags=allowed_tags, strip=True
         ))
 
+    def to_json(self):
+        json_comment = {
+            url: url_for('api.get_comment', id=self.id),
+            body: self.body,
+            body_html: self.body_html,
+            timestamp: self.timestamp,
+            disabled: self.disabled,
+            author_url: url_for('api.get_user', id=self.author_id),
+            post_url: url_for('api.get_post', id=self.post_id)
+
+        }
+        return json_comment
+
+    @staticmethod
+    def from_json(json_comment):
+        body = json_comment.body
+        if body == '' or body is None:
+            raise ValidationError('this comment does not have a body')
+        return Comment(body=body)
+
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
