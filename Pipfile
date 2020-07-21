@@ -19,6 +19,7 @@ bleach = "*"
 flask-pagedown = "*"
 flask-httpauth = "*"
 httpie = "*"
+coverage = "*"
 
 [dev-packages]
 autopep8 = "*"
