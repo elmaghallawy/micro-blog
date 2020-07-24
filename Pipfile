@@ -18,8 +18,6 @@ markdown = "*"
 bleach = "*"
 flask-pagedown = "*"
 flask-httpauth = "*"
-httpie = "*"
-coverage = "*"
 
 [dev-packages]
 autopep8 = "*"
@@ -27,6 +25,9 @@ pylint = "*"
 faker = "*"
 pylint-flask = "*"
 pytest = "*"
+selenium = "*"
+coverage = "*"
+httpie = "*"
 
 [requires]
 python_version = "3.8"

@@ -11,3 +11,6 @@ nosetests.xml
 
 # vscode
 .vscode
+
+#tmp
+tmp
