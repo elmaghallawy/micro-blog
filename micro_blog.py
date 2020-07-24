@@ -3,7 +3,8 @@ import sys
 import click
 from app import create_app, db
 from app.models import User, Role, Comment
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
+from app.models import Role, User
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
@@ -64,3 +65,16 @@ def profile(length, profile_dir):
                                       profile_dir=profile_dir)
     if __name__ == "__main__":
         app.run(debug=False)
+
+
+@manager.command
+def deploy():
+    """run deployment tasks"""
+    # migrate database to latest revision
+    upgrade()
+
+    # create or update user roles
+    Role.insert_roles()
+
+    # ensure all users are following themselves
+    User.add_self_follows()
