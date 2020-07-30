@@ -67,7 +67,7 @@ def profile(length, profile_dir):
         app.run(debug=False)
 
 
-@manager.command
+@app.cli.command()
 def deploy():
     """run deployment tasks"""
     # migrate database to latest revision
